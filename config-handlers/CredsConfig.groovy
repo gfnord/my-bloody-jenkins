@@ -3,7 +3,6 @@ import com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl
 import com.cloudbees.plugins.credentials.domains.Domain
 import com.cloudbees.plugins.credentials.SystemCredentialsProvider
 import com.cloudbees.plugins.credentials.CredentialsScope
-import com.cloudbees.jenkins.plugins.awscredentials.AWSCredentialsImpl
 import org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl
 import jenkins.model.Jenkins
 import hudson.util.Secret
@@ -84,20 +83,6 @@ def userPassCred(config) {
             description,
             username,
             password
-        )
-    }
-}
-
-def awsCred(config){
-    config.with{
-        return new AWSCredentialsImpl(
-            CredentialsScope.GLOBAL,
-            id,
-            access_key ?: accessKey,
-            secret_access_key ?: secretKey,
-            description,
-            iamRoleArn,
-            iamMfaSerialNumber?.toString()
         )
     }
 }

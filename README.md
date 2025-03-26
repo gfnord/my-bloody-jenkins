@@ -1,3 +1,13 @@
+# Build the image
+```sh
+podman login -u gfnord docker.io
+podman build -t gfnord/my-bloody-jenkins:2.502 .
+podman push gfnord/my-bloody-jenkins:2.502
+```
+Remember to have the line 
+unqualified-search-registries = ["docker.io"]
+at /etc/containers/registries.conf
+
 # My Bloody Jenkins - An opinionated Jenkins Docker Image
 [![Build Status](https://github.com/odavid/my-bloody-jenkins/workflows/main/badge.svg?branch=master)](https://github.com/odavid/my-bloody-jenkins/workflows/main/badge.svg)
 [![Docker Pulls](https://img.shields.io/docker/pulls/odavid/my-bloody-jenkins.svg)](https://hub.docker.com/r/odavid/my-bloody-jenkins/)
@@ -1085,4 +1095,3 @@ return this
 ```
 
 * In the configuration yaml file, have a ```customConfig``` top level key that will be passed to the above groovy script.
-
