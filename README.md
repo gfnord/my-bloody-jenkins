@@ -1,8 +1,8 @@
 # Build the image
 ```sh
 podman login -u gfnord docker.io
-podman build -t gfnord/my-bloody-jenkins:2.502 .
-podman push gfnord/my-bloody-jenkins:2.502
+podman build -t gfnord/my-bloody-jenkins:2.504 .
+podman push gfnord/my-bloody-jenkins:2.504
 ```
 Remember to have the line 
 unqualified-search-registries = ["docker.io"]
@@ -253,7 +253,6 @@ Responsible for:
     * active_directory - Uses [active-directory plugin](https://wiki.jenkins.io/display/JENKINS/Active+Directory+plugin)
     * saml - Uses [saml plugin](https://plugins.jenkins.io/saml)
     * google - Uses [google-login plugin](https://plugins.jenkins.io/google-login)
-    * oic - Uses [oic-auth plugin](https://plugins.jenkins.io/oic-auth/)
     * github - Uses [github-oauth plugin](https://plugins.jenkins.io/github-oauth)
 * User/Group Permissions dict - Each key represent a user or a group and its value is a list of Jenkins [Permissions IDs](https://wiki.jenkins.io/display/JENKINS/Matrix-based+security)
     * For disable configure Matrix based Security you should add "unsecureStrategy: true" (Anyone can do anything)
