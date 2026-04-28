@@ -1,5 +1,5 @@
 import com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey
-import com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl
+import com.cloudbees.plugins.credentials.impl.*
 import com.cloudbees.plugins.credentials.domains.Domain
 import com.cloudbees.plugins.credentials.SystemCredentialsProvider
 import com.cloudbees.plugins.credentials.CredentialsScope
@@ -118,7 +118,7 @@ def certCred(config){
             def secretBytes = com.cloudbees.plugins.credentials.SecretBytes.fromString(base64)
             keyStoreSource = new com.cloudbees.plugins.credentials.impl.CertificateCredentialsImpl.UploadedKeyStoreSource(secretBytes)
         }else if(fileOnMaster){
-            keyStoreSource = new com.cloudbees.plugins.credentials.impl.CertificateCredentialsImpl.FileOnMasterKeyStoreSource(fileOnMaster)
+            keyStoreSource = new com.cloudbees.plugins.credentials.impl.CertificateCredentialsImpl.UploadedKeyStoreSource(fileOnMaster)
         }
         return new com.cloudbees.plugins.credentials.impl.CertificateCredentialsImpl(
             CredentialsScope.GLOBAL,
