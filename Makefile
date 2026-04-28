@@ -10,13 +10,13 @@ build-all: build-alpine build-debian build-jdk11
 test-all: test-alpine test-debian test-jdk11
 
 build-alpine:
-	docker build --rm --force-rm -t odavid/my-bloody-jenkins $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(LTS_VERSION)-alpine .
+	docker build --platform linux/amd64 --rm --force-rm -t odavid/my-bloody-jenkins $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(LTS_VERSION)-alpine .
 
 build-debian:
-	docker build --rm --force-rm -t odavid/my-bloody-jenkins $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(LTS_VERSION) .
+	docker build --platform linux/amd64 --rm --force-rm -t odavid/my-bloody-jenkins $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(LTS_VERSION) .
 
 build-jdk11:
-	docker build --rm --force-rm -t odavid/my-bloody-jenkins $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(LTS_VERSION)-jdk11 .
+	docker build --platform linux/amd64 --rm --force-rm -t odavid/my-bloody-jenkins $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(LTS_VERSION)-jdk11 .
 
 test-alpine: build-alpine
 	bats tests
@@ -28,7 +28,7 @@ test-jdk11: build-jdk11
 	bats tests
 
 update-plugins:
-	env python3 $(PWD)/get-latest-plugins.py
+	env python $(PWD)/get-latest-plugins.py
 	git diff plugins.txt | grep  '^+' | sed 's|+||' | grep -v + | awk -F \: '{print "* ["$$1":"$$2"](https://plugins.jenkins.io/" $$1 ")"}'
 
 release:

@@ -3,9 +3,11 @@ import com.cloudbees.plugins.credentials.impl.*
 import com.cloudbees.plugins.credentials.domains.Domain
 import com.cloudbees.plugins.credentials.SystemCredentialsProvider
 import com.cloudbees.plugins.credentials.CredentialsScope
+import com.cloudbees.jenkins.plugins.awscredentials.AWSCredentialsImpl
 import org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl
 import jenkins.model.Jenkins
 import hudson.util.Secret
+import hudson.model.FileParameterValue
 import org.jenkinsci.plugins.structs.describable.DescribableModel
 
 def asInt(value, defaultValue=0){
@@ -87,6 +89,20 @@ def userPassCred(config) {
     }
 }
 
+def awsCred(config){
+    config.with{
+        return new AWSCredentialsImpl(
+            CredentialsScope.GLOBAL,
+            id,
+            access_key ?: accessKey,
+            secret_access_key ?: secretKey,
+            description,
+            iamRoleArn,
+            iamMfaSerialNumber?.toString()
+        )
+    }
+}
+
 def textCred(config){
     config.with{
         return new StringCredentialsImpl(
@@ -118,7 +134,7 @@ def certCred(config){
             def secretBytes = com.cloudbees.plugins.credentials.SecretBytes.fromString(base64)
             keyStoreSource = new com.cloudbees.plugins.credentials.impl.CertificateCredentialsImpl.UploadedKeyStoreSource(secretBytes)
         }else if(fileOnMaster){
-            keyStoreSource = new com.cloudbees.plugins.credentials.impl.CertificateCredentialsImpl.UploadedKeyStoreSource(fileOnMaster)
+            keyStoreSource = new com.cloudbees.plugins.credentials.impl.CertificateCredentialsImpl.UploadedKeyStoreSource(new FileParameterValue.FileItemImpl(fileOnMaster), null)
         }
         return new com.cloudbees.plugins.credentials.impl.CertificateCredentialsImpl(
             CredentialsScope.GLOBAL,
@@ -129,6 +145,7 @@ def certCred(config){
         )
     }
 }
+
 def gitlabApiToken(config){
     config.with{
         return new com.dabsquared.gitlabjenkins.connection.GitLabApiTokenImpl(
@@ -227,4 +244,3 @@ def setup(config){
 }
 
 return this
-
