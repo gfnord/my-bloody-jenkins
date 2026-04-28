@@ -1,8 +1,8 @@
 # Build the image
 ```sh
 podman login -u gfnord docker.io
-podman build -t gfnord/my-bloody-jenkins:2.504 .
-podman push gfnord/my-bloody-jenkins:2.504
+podman build -t gfnord/my-bloody-jenkins:2.555.1 .
+podman push gfnord/my-bloody-jenkins:2.555.1
 ```
 Remember to have the line 
 unqualified-search-registries = ["docker.io"]

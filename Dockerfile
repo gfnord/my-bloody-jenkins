@@ -1,4 +1,4 @@
-ARG FROM_TAG=2.504
+ARG FROM_TAG=2.555.1-jdk21
 
 FROM jenkins/jenkins:${FROM_TAG}
 
@@ -28,9 +28,8 @@ RUN \
           ; \
      fi
 
-RUN  pip3 install --break-system-packages --no-cache-dir --upgrade pip \
-  && pip install --break-system-packages --no-cache-dir wheel \
-  && pip install --break-system-packages --no-cache-dir awscli PyYAML six requests botocore boto3
+RUN  pip3 install --break-system-packages --no-cache-dir wheel \
+  && pip3 install --break-system-packages --no-cache-dir awscli PyYAML six requests botocore boto3
 
 RUN curl $CURL_OPTIONS https://releases.hashicorp.com/envconsul/0.13.2/envconsul_0.13.2_linux_amd64.zip -o /tmp/envconsul.zip && \
     unzip -d /usr/bin /tmp/envconsul.zip && \
