@@ -13,3 +13,4 @@ vars/aws_generated/
 *.hpi
 .vscode
 .venv
+.omo/
