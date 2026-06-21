@@ -19,7 +19,7 @@ Running the example will:
 In order to run the example
 ```bash
 $ # Clone the repository
-$ git clone https://github.com/odavid/my-bloody-jenkins.git
+$ git clone https://github.com/gfnord/my-bloody-jenkins.git
 $ cd my-bloody-jenkins/examples/docker
 $ # start the server including setup of variables. 
 $ # Before that step, you can also add a GIT user credential based on GIT_PRIVATE_KEY to config.yml

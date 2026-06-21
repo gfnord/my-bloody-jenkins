@@ -1,18 +1,17 @@
-# Build the image
+# My Bloody Jenkins - An opinionated Jenkins Docker Image
+[![Build Status](https://github.com/gfnord/my-bloody-jenkins/workflows/main/badge.svg?branch=master)](https://github.com/gfnord/my-bloody-jenkins/workflows/main/badge.svg)
+[![Docker Pulls](https://img.shields.io/docker/pulls/gfnord/my-bloody-jenkins.svg)](https://hub.docker.com/r/gfnord/my-bloody-jenkins/)
+[![Changelog](https://img.shields.io/github/v/tag/gfnord/my-bloody-jenkins?label=changelog)](https://github.com/gfnord/my-bloody-jenkins/blob/master/CHANGELOG.md)
+
+> **Fork notice**: This is the `gfnord` fork of [odavid/my-bloody-jenkins](https://github.com/odavid/my-bloody-jenkins). It tracks upstream and republishes images as `gfnord/my-bloody-jenkins` on Docker Hub and GHCR. The fork is pinned to Jenkins LTS `2.555.1` on JDK 21.
+
+## Build the image (fork)
 ```sh
 podman login -u gfnord docker.io
 podman build -t gfnord/my-bloody-jenkins:2.555.1 .
 podman push gfnord/my-bloody-jenkins:2.555.1
 ```
-Remember to have the line 
-unqualified-search-registries = ["docker.io"]
-at /etc/containers/registries.conf
-
-# My Bloody Jenkins - An opinionated Jenkins Docker Image
-[![Build Status](https://github.com/odavid/my-bloody-jenkins/workflows/main/badge.svg?branch=master)](https://github.com/odavid/my-bloody-jenkins/workflows/main/badge.svg)
-[![Docker Pulls](https://img.shields.io/docker/pulls/odavid/my-bloody-jenkins.svg)](https://hub.docker.com/r/odavid/my-bloody-jenkins/)
-[![Changelog](https://img.shields.io/github/v/tag/odavid/my-bloody-jenkins?label=changelog)](https://github.com/odavid/my-bloody-jenkins/blob/master/CHANGELOG.md)
-[![Helm Chart](https://img.shields.io/badge/helm--chart-my--bloody--jenkins-blue.svg)](https://github.com/odavid/k8s-helm-charts/tree/master/charts/my-bloody-jenkins)
+Ensure `unqualified-search-registries = ["docker.io"]` is set in `/etc/containers/registries.conf`.
 
 ## What's in the Box?
 *My Bloody Jenkins* is a re-distribution of the [Official LTS Jenkins Docker image](https://hub.docker.com/r/jenkins/jenkins/) bundled with most popular plugins and
@@ -34,7 +33,7 @@ The image is "Battle Proven" and serves as the base ground for several Jenkins d
   * Seed Jobs
   * JobDSL Scripts
   * Script approvals
-  * Notifiers (Hipchat, Slack, Email, Email-Ext)
+  * Notifiers (Slack, Email, Email-Ext)
   * Credentials (aws, userpass, sshkeys, certs, kubernetes, gitlab, simple secrets)
   * Tools and installers (JDK, Ant, Maven, Gradle, SonarQube, Xvfb,Golang)
   * Misc. Plugins configuration such as Jira, SonarQube, Checkmarx, Artifactory
@@ -43,7 +42,7 @@ The image is "Battle Proven" and serves as the base ground for several Jenkins d
 * Supports quiet startup period to enable docker restarts with a graceful time which Jenkins is in *Quiet Mode*
 * Automated Re-Configure based on configuration data change without restarts
 * Supports Dynamic Host IP configuration passed to clouds when Jenkins is running in a cluster
-* Supports dynamic envrionment variables from [consul](https://www.consul.io/) and [vault](https://www.vaultproject.io/) using [envconsul](https://github.com/hashicorp/envconsul)
+* Supports dynamic environment variables from [consul](https://www.consul.io/) and [vault](https://www.vaultproject.io/) using [envconsul](https://github.com/hashicorp/envconsul)
 * Supports [configuration-as-code-plugin](https://github.com/jenkinsci/configuration-as-code-plugin) as an alternative configuration syntax
 
 ## Why Use the term "Bloody"?
@@ -54,11 +53,13 @@ I just thought it is a "catchy" name for this kind of a repository.
 A [step by step demo](demo) can be found [here](demo)
 
 ## k8s Helm Chart
-In order to deploy in k8s, A corresponding [Helm Chart](https://github.com/odavid/k8s-helm-charts/tree/master/charts/my-bloody-jenkins) can be found [Here](https://github.com/odavid/k8s-helm-charts/tree/master/charts/my-bloody-jenkins)
+The upstream maintainer's [Helm Chart](https://github.com/odavid/k8s-helm-charts/tree/master/charts/my-bloody-jenkins) can be used to deploy this image on k8s. Point `image.repository` at `gfnord/my-bloody-jenkins`:
 
 ```shell
 helm repo add odavid https://odavid.github.io/k8s-helm-charts
-helm install odavid/my-bloody-jenkins [-f values.yml]
+helm install odavid/my-bloody-jenkins \
+  --set image.repository=gfnord/my-bloody-jenkins \
+  [-f values.yml]
 ```
 
 ## Some Usage Examples
@@ -66,7 +67,7 @@ helm install odavid/my-bloody-jenkins [-f values.yml]
 * [kubernetes](examples/kubernetes/) cloud using Minikube with seed job. See [examples/kubernetes](examples/kubernetes/)
 
 ## Releases
-Docker Images are pushed to [Docker Hub](https://hub.docker.com/r/odavid/my-bloody-jenkins/)
+Docker Images are pushed to [Docker Hub](https://hub.docker.com/r/gfnord/my-bloody-jenkins/)
 
 Each release is a git tag v$LTS_VERSION-$INCREMENT where:
 
@@ -83,34 +84,34 @@ Each master commit, will be tagged as latest
 
 ```bash
 # get the latest release, alpine
-docker pull odavid/my-bloody-jenkins:lts
+docker pull gfnord/my-bloody-jenkins:lts
 # get the latest debian release
-docker pull odavid/my-bloody-jenkins:lts-debian
-# get the latest jdk11 release
-docker pull odavid/my-bloody-jenkins:lts-jdk11
+docker pull gfnord/my-bloody-jenkins:lts-debian
+# get the latest jdk21 release
+docker pull gfnord/my-bloody-jenkins:lts-jdk21
 
-# get the latest 2.164.1 LTS
-docker pull odavid/my-bloody-jenkins:2.164.1
-# get the latest 2.164.1 debian LTS
-docker pull odavid/my-bloody-jenkins:2.164.1-debian
-# get the latest 2.164.1 jdk11 LTS
-docker pull odavid/my-bloody-jenkins:2.164.1-jdk
+# get the latest 2.555.1 LTS
+docker pull gfnord/my-bloody-jenkins:2.555.1
+# get the latest 2.555.1 debian LTS
+docker pull gfnord/my-bloody-jenkins:2.555.1-debian
+# get the latest 2.555.1 jdk21 LTS
+docker pull gfnord/my-bloody-jenkins:2.555.1-jdk21
 
-# get a concrete 2.164.1 release
-docker pull odavid/my-bloody-jenkins:v2.164.1-109
+# get a concrete 2.555.1 release
+docker pull gfnord/my-bloody-jenkins:v2.555.1-306
 
 # get the latest unstable image (alpine)
-docker pull odavid/my-bloody-jenkins
+docker pull gfnord/my-bloody-jenkins
 # get the latest unstable debian image
-docker pull odavid/my-bloody-jenkins:debian
-# get the latest unstable jdk1 image
-docker pull odavid/my-bloody-jenkins:jdk11
+docker pull gfnord/my-bloody-jenkins:debian
+# get the latest unstable jdk21 image
+docker pull gfnord/my-bloody-jenkins:jdk21
 ```
 
 ### Alternate docker registry
 
 The docker image is also published to `ghcr.io`
-So you can also pull it from `ghcr.io/odavid/my-bloody-jenkins:<tag>`
+So you can also pull it from `ghcr.io/gfnord/my-bloody-jenkins:<tag>`
 
 
 ## Environment Variables
@@ -155,6 +156,14 @@ Supported URLs:
 
 * `JENKINS_ENV_CONFIG_MODE` - If set to `jcasc`, then [Configuration as Code Plugin](https://github.com/jenkinsci/configuration-as-code-plugin) will be used instead of [Built-in Configuration Handlers](#configuration-reference). See [JCasC Demo](./demo/jcasc-plugin).
 > This option will disable all configuration handlers used by the image! If you still want to use builtin configuration handlers, together with dynamic JCasC snippets, please see [Configuration as Code Section](#configuration-as-code-section).
+
+### General Configuration Variables
+These variables tune the Jenkins instance itself and are read by the `GeneralConfig` handler at startup:
+
+* `JENKINS_SLAVE_AGENT_PORT` - TCP port for JNLP agents (default `50000`).
+* `JENKINS_ENV_EXECUTERS` - Number of executors on the master. Default `0` (let the master be a master, don't run any jobs on it).
+* `JENKINS_ENV_CHANGE_WORKSPACE_DIR` - If `true` (default), workspaces are moved off `${JENKINS_HOME}/workspace` to `/jenkins-workspace-home/workspace/${ITEM_FULLNAME}`. Useful when `JENKINS_HOME` is on a slow NFS mount.
+* `DISABLE_CHOWN_ON_STARTUP` - If set, skip the recursive `chown` of `${JENKINS_HOME}` on startup. Speeds up restarts on large persistent volumes, but the volume must already be owned by the `jenkins` user.
 
 ## Configuration Reference
 The configuration is divided into main configuration sections. Each section is responsible for a specific aspect of jenkins configuration.
@@ -658,7 +667,7 @@ In case the SCM Source is not git, you can use dynamic configuration based on th
 pipeline_libraries:
   my-library: # the library name
     source:
-      remote: git@github.com:odavid/jenkins-docker.git
+      remote: git@github.com:gfnord/jenkins-docker.git
       credentialsId: gitsshkey # should be defined in credentials section
     defaultVersion: master
     implicit: false # Default false - if true the library will be available within all pipeline jobs with declaring it with @Library
@@ -905,7 +914,7 @@ seed_jobs:
   SeedJob:
     source:
       # git repo where of the seed job
-      remote: git@github.com:odavid/my-bloody-jenkins.git
+      remote: git@github.com:gfnord/my-bloody-jenkins.git
       credentialsId: gitsshkey
       branch: 'master'
     triggers:

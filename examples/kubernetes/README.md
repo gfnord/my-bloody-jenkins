@@ -26,7 +26,7 @@ $ minikube start
 In order to run the example
 ```bash
 $ # Clone the repository
-$ git clone https://github.com/odavid/my-bloody-jenkins.git
+$ git clone https://github.com/gfnord/my-bloody-jenkins.git
 $ cd my-bloody-jenkins/examples/kubernetes
 $ # setup variables to be used by docker-compose
 $ . ./setup-env
