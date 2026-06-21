@@ -5,18 +5,18 @@ DEFAULT_BUILD_ARGS = --build-arg http_proxy=$(http_proxy) --build-arg https_prox
 
 default: test-all
 
-build-all: build-alpine build-debian build-jdk11
+build-all: build-alpine build-debian build-jdk21
 
-test-all: test-alpine test-debian test-jdk11
+test-all: test-alpine test-debian test-jdk21
 
 build-alpine:
-	docker build --platform linux/amd64 --rm --force-rm -t odavid/my-bloody-jenkins $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(LTS_VERSION)-alpine .
+	docker build --platform linux/amd64 --rm --force-rm -t gfnord/my-bloody-jenkins $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(LTS_VERSION)-alpine .
 
 build-debian:
-	docker build --platform linux/amd64 --rm --force-rm -t odavid/my-bloody-jenkins $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(LTS_VERSION) .
+	docker build --platform linux/amd64 --rm --force-rm -t gfnord/my-bloody-jenkins $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(LTS_VERSION) .
 
-build-jdk11:
-	docker build --platform linux/amd64 --rm --force-rm -t odavid/my-bloody-jenkins $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(LTS_VERSION)-jdk11 .
+build-jdk21:
+	docker build --platform linux/amd64 --rm --force-rm -t gfnord/my-bloody-jenkins $(DEFAULT_BUILD_ARGS) --build-arg=FROM_TAG=$(LTS_VERSION)-jdk21 .
 
 test-alpine: build-alpine
 	bats tests
@@ -24,7 +24,7 @@ test-alpine: build-alpine
 test-debian: build-debian
 	bats tests
 
-test-jdk11: build-jdk11
+test-jdk21: build-jdk21
 	bats tests
 
 update-plugins:
