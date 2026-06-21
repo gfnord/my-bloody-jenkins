@@ -8,20 +8,22 @@ Three base variants are built for each release:
 |---------|-----------|----------|
 | Alpine | `jenkins/jenkins:2.555.1-alpine` | `${LTS_VERSION}-alpine` |
 | Debian | `jenkins/jenkins:2.555.1` | `${LTS_VERSION}` |
-| JDK11 | `jenkins/jenkins:2.555.1-jdk11` | `${LTS_VERSION}-jdk11` |
+| JDK21 | `jenkins/jenkins:2.555.1-jdk21` | `${LTS_VERSION}-jdk21` |
+
+> The default `FROM_TAG` in the `Dockerfile` is `2.555.1-jdk21`. The Makefile and `publish.sh` build all three variants.
 
 ## Versioning
 
 - **Git tags**: `v${LTS_VERSION}-${INCREMENT}` (e.g., `v2.555.1-306`)
-- **Docker tags per release**: `2.555.1-306`, `2.555.1`, `lts`, plus `-debian` and `-jdk11` suffixes
-- **Master branch**: tagged as `latest` / `alpine` / `debian` / `jdk11`
+- **Docker tags per release**: `2.555.1-306`, `2.555.1`, `lts`, plus `-debian` and `-jdk21` suffixes
+- **Master branch**: tagged as `latest` / `alpine` / `debian` / `jdk21`
 
 ## Registries
 
 | Registry | Image |
 |----------|-------|
-| Docker Hub | `odavid/my-bloody-jenkins:<tag>` |
-| GitHub CR | `ghcr.io/odavid/my-bloody-jenkins:<tag>` |
+| Docker Hub | `gfnord/my-bloody-jenkins:<tag>` |
+| GitHub CR | `ghcr.io/gfnord/my-bloody-jenkins:<tag>` |
 
 ## Building Locally
 
@@ -32,7 +34,7 @@ make build-all
 # Build a single variant
 make build-alpine
 make build-debian
-make build-jdk11
+make build-jdk21
 
 # With proxy support (uses http_proxy/https_proxy env vars)
 make build-alpine
@@ -53,7 +55,7 @@ The `publish.sh` script handles multi-variant builds and pushes:
 For a versioned release, `publish.sh` builds and pushes **9 images**:
 - `$tag`, `$short_tag`, `lts` (Alpine)
 - `$tag-debian`, `$short_tag-debian`, `lts-debian`
-- `$tag-jdk11`, `$short_tag-jdk11`, `lts-jdk11`
+- `$tag-jdk21`, `$short_tag-jdk21`, `lts-jdk21`
 
 ## Plugin Management
 
@@ -108,7 +110,7 @@ docker run -d \
   -e JENKINS_ENV_ADMIN_USER=admin \
   -e JENKINS_ENV_CONFIG_YAML="$(cat config.yml)" \
   -v jenkins-home:/var/jenkins_home \
-  odavid/my-bloody-jenkins:lts
+  gfnord/my-bloody-jenkins:lts
 ```
 
 ### Config from File
@@ -119,7 +121,7 @@ docker run -d \
   -e JENKINS_ENV_CONFIG_YML_URL=file:///config/config.yml \
   -v /path/to/config:/config:ro \
   -v jenkins-home:/var/jenkins_home \
-  odavid/my-bloody-jenkins:lts
+  gfnord/my-bloody-jenkins:lts
 ```
 
 ### Config from S3 with Watch
@@ -130,7 +132,7 @@ docker run -d \
   -e JENKINS_ENV_CONFIG_YML_URL=s3://my-bucket/jenkins/config.yml \
   -e JENKINS_ENV_CONFIG_YML_URL_POLLING=60 \
   -v jenkins-home:/var/jenkins_home \
-  odavid/my-bloody-jenkins:lts
+  gfnord/my-bloody-jenkins:lts
 ```
 
 ### Config from Multiple Sources (Deep Merge)
@@ -140,7 +142,7 @@ docker run -d \
   -e JENKINS_ENV_ADMIN_USER=admin \
   -e JENKINS_ENV_CONFIG_YML_URL="file:///config/base.yml,file:///config/override.yml" \
   -v /path/to/config:/config:ro \
-  odavid/my-bloody-jenkins:lts
+  gfnord/my-bloody-jenkins:lts
 ```
 
 ### With Kubernetes Secrets
@@ -157,9 +159,13 @@ docker run -d \
 
 ### Kubernetes via Helm
 
+The upstream maintainer's Helm chart works with this fork. Point `image.repository` at `gfnord/my-bloody-jenkins`:
+
 ```bash
 helm repo add odavid https://odavid.github.io/k8s-helm-charts
-helm install my-jenkins odavid/my-bloody-jenkins -f values.yml
+helm install my-jenkins odavid/my-bloody-jenkins \
+  --set image.repository=gfnord/my-bloody-jenkins \
+  -f values.yml
 ```
 
 Helm chart source: https://github.com/odavid/k8s-helm-charts/tree/master/charts/my-bloody-jenkins
@@ -171,7 +177,7 @@ docker run -d \
   -e JENKINS_ENV_ADMIN_USER=admin \
   -e JENKINS_ENV_CONFIG_MODE=jcasc \
   -e JENKINS_ENV_CONFIG_YAML="$(cat jcasc-config.yml)" \
-  odavid/my-bloody-jenkins:lts
+  gfnord/my-bloody-jenkins:lts
 ```
 
 ### Behind Load Balancer
@@ -186,10 +192,10 @@ docker run -d \
 | Target | Description |
 |--------|-------------|
 | `default` | `test-all` |
-| `build-all` | Build alpine + debian + jdk11 |
-| `test-all` | Test alpine + debian + jdk11 |
+| `build-all` | Build alpine + debian + jdk21 |
+| `test-all` | Test alpine + debian + jdk21 |
 | `test-alpine` | Build and test alpine |
 | `test-debian` | Build and test debian |
-| `test-jdk11` | Build and test jdk11 |
+| `test-jdk21` | Build and test jdk21 |
 | `update-plugins` | Auto-update plugins from UC |
 | `release` | Create new version git tag |

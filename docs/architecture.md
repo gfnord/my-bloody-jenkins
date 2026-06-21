@@ -4,9 +4,11 @@
 
 An opinionated Docker image for Jenkins LTS that bundles popular plugins and enables full Jenkins configuration from a **single YAML file**. Supports live configuration reloading without restarts, multiple config data sources, and production deployment patterns.
 
-**Base image**: `jenkins/jenkins:${FROM_TAG}` (Alpine, Debian, or JDK11 variants)
-**Current LTS**: `2.555.1`
-**Current release**: `2.555.1-305`
+> **Fork notice**: This is the `gfnord` fork of [odavid/my-bloody-jenkins](https://github.com/odavid/my-bloody-jenkins). It tracks upstream and republishes images as `gfnord/my-bloody-jenkins` on Docker Hub and GHCR. The fork is pinned to Jenkins LTS `2.555.1` on JDK 21.
+
+**Base image**: `jenkins/jenkins:${FROM_TAG}` (Alpine, Debian, or JDK21 variants)
+**Current LTS pin**: `2.555.1` (see `LTS_VERSION.txt`)
+**Latest tagged release**: `v2.426.3-305` (the `2.555.1` line is in-development; next release will be `2.555.1-306`)
 
 ## Project Structure
 
@@ -16,7 +18,7 @@ my-bloody-jenkins/
 ├── Makefile                   # Build/test/release targets
 ├── publish.sh                 # Multi-variant Docker image publishing
 ├── LTS_VERSION.txt            # Current Jenkins LTS version pin
-├── plugins.txt                # Pinned plugin versions (213+ plugins)
+├── plugins.txt                # Pinned plugin versions (213 plugins)
 ├── plugins.txt.orig           # Original plugin list (before auto-update)
 ├── get-latest-plugins.py      # Auto-update plugin versions from Jenkins UC
 ├── .ignored-update-plugins    # Plugins excluded from auto-update

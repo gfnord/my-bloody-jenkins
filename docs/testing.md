@@ -13,12 +13,12 @@ make test-all
 # Run tests for a specific distribution
 make test-alpine
 make test-debian
-make test-jdk11
+make test-jdk21
 
 # Build without testing
 make build-alpine
 make build-debian
-make build-jdk11
+make build-jdk21
 
 # Update plugins to latest versions
 make update-plugins
@@ -165,7 +165,7 @@ GitHub Actions workflow (`.github/workflows/main.yml`):
 ```
 Push to any branch
   |
-  +-- Test matrix: [debian, alpine, jdk11]
+  +-- Test matrix: [debian, alpine, jdk21]
   |     +-- bats-core/bats-action@2.0.0
   |     +-- make test-${{ matrix.dist }}
   |
