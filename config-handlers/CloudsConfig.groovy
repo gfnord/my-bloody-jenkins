@@ -8,9 +8,6 @@ import com.nirima.jenkins.plugins.docker.launcher.*
 import com.nirima.jenkins.plugins.docker.strategy.*
 import io.jenkins.docker.connector.DockerComputerJNLPConnector
 
-import com.cloudbees.jenkins.plugins.amazonecs.*
-import static com.cloudbees.jenkins.plugins.amazonecs.ECSTaskTemplate.*
-
 import org.csanchez.jenkins.plugins.kubernetes.*
 import org.csanchez.jenkins.plugins.kubernetes.volumes.*
 import org.csanchez.jenkins.plugins.kubernetes.volumes.workspace.*
@@ -150,99 +147,6 @@ def dockerCloud(config){
     }
 }
 
-def ecsCloud(config){
-    config.with{
-        def ecsCloud = new ECSCloud(
-            id,
-            credentialsId ?: '',
-            assumedRoleArn,
-            cluster
-        )
-        ecsCloud.regionName = region
-        ecsCloud.jenkinsUrl = jenkinsUrl
-        ecsCloud.slaveTimeoutInSeconds = asInt(slaveTimeoutInSeconds ?: connectTimeout)
-        ecsCloud.retentionTimeout = asInt(retentionTimeout)
-        ecsCloud.templates = templates?.collect{ temp ->
-            def ecsTemplate = new ECSTaskTemplate(
-                temp.name ? temp.name : temp.labels?.join('-'),
-                temp.labels?.join(' '),
-                temp.agentContainerName,
-                temp.taskDefinitionOverride,
-                temp.dynamicTaskDefinitionOverride,
-                temp.image,
-                temp.repositoryCredentials,
-                temp.launchType,
-                temp.operatingSystemFamily,
-                temp.cpuArchitecture,
-                asBoolean(temp.defaultCapacityProvider),
-                temp.capacityProviderStrategies?.collect { cpsItem ->
-                    new CapacityProviderStrategyEntry(cpsItem.provider, asInt(cpsItem.base), asInt(cpsItem.weight))
-                },
-                temp.networkMode,
-                temp.remoteFs,
-                asBoolean(temp.uniqueRemoteFSRoot),
-                temp.platformVersion,
-                asInt(temp.memory),
-                asInt(temp.memoryReservation),
-                asInt(temp.cpu),
-                asInt(temp.ephemeralStorageSizeInGiB, null),
-                temp.subnets,
-                temp.securityGroups,
-                asBoolean(temp.assignPublicIp),
-                asBoolean(temp.privileged),
-                temp.containerUser,
-                temp.kernelCapabilities,
-                temp.logDriverOptions?.collect{ k,v -> new LogDriverOption(k,v) },
-                temp.tags?.collect{k, v -> new Tag(k, v)},
-                temp.environment?.collect{ k, v -> new EnvironmentEntry(k,v) },
-                temp.extraHosts?.collect { k, v -> new ExtraHostEntry(k,v) },
-                temp.volumes?.collect { vol -> parseContainerVolume(vol){
-                    vol_name, host_path, container_path,read_only ->
-                        new MountPointEntry(vol_name, host_path, container_path,read_only)
-                    }
-                },
-                temp.efsMountPoints?.collect{ vol ->
-                    new ECSTaskTemplate.EFSMountPointEntry(
-                        vol.name,
-                        vol.containerPath,
-                        asBoolean(vol.readOnly),
-                        vol.fileSystemId,
-                        vol.rootDirectory,
-                        vol.accessPointId,
-                        asBoolean(vol.transitEncryption),
-                        asBoolean(vol.iam)
-                    )
-                },
-                temp.ports?.collect {portMapping ->
-                    def parts = portMapping?.toString().split(':')
-                    def hostPort = parts.size() > 1 ? parts[0] : null
-                    def containerPort = parts.size() > 1 ? parts[1] : parts[0]
-                    return new ECSTaskTemplate.PortMappingEntry(asInt(containerPort), asInt(hostPort), "tcp")
-                },
-                temp.ulimits?.collect {ulimit ->
-                    return new ECSTaskTemplate.UlimitEntry(asInt(ulimit.softLimit, null), asInt(ulimit.hardLimit, null), ulimit.ulimitName)
-                },
-                temp.executionRole ?: 'ecsTaskExecutionRole',
-                temp.placementStrategies?.collect { placementStrategyEntry ->
-                    new ECSTaskTemplate.PlacementStrategyEntry(placementStrategyEntry.type, placementStrategyEntry.field)
-                },
-                temp.taskrole,
-                temp.inheritFrom,
-                asInt(temp.sharedMemorySize),
-                asBoolean(temp.enableExecuteCommand),
-            )
-            ecsTemplate.jvmArgs = temp.jvmArgs
-            ecsTemplate.entrypoint = temp.entrypoint
-            ecsTemplate.logDriver = temp.logDriver
-            ecsTemplate.dnsSearchDomains = temp.dns
-            return ecsTemplate
-        }
-
-        ecsCloud.tunnel = tunnel
-        return ecsCloud
-    }
-}
-
 def kubernetesCloud(config){
     config.with{
         def kubernetesCloud = new KubernetesCloud(
@@ -344,8 +248,6 @@ def setup(config){
         switch(v.type){
             case 'docker':
                 return dockerCloud(cloudConfig)
-            case 'ecs':
-                return ecsCloud(cloudConfig)
             case 'kubernetes':
                 return kubernetesCloud(cloudConfig)
         }

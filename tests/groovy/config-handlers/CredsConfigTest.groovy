@@ -33,13 +33,6 @@ file-cred:
   description: This is a file
   secretBytes: QUJDREVG
   fileName: myFile
-aws-cred:
-  type: aws
-  access_key: xxxx
-  secret_access_key: yyyy
-  description: aws description
-  iamRoleArn: arn://xxx
-  iamMfaSerialNumber: 123
 userpass-cred:
   type: userpass
   username: user
@@ -121,13 +114,6 @@ dynamic-p4-ticket-cred:
         assert it.description == "This is a file"
         assert it.secretBytes.plainData.encodeBase64().toString() == "QUJDREVG"
         assert it.fileName == "myFile"
-    }
-    assertCred("aws-cred", com.cloudbees.jenkins.plugins.awscredentials.AWSCredentialsImpl){
-        assert it.description == "aws description"
-        assert it.accessKey == "xxxx"
-        assert it.secretKey.toString() == "yyyy"
-        assert it.iamRoleArn == 'arn://xxx'
-        assert it.iamMfaSerialNumber == '123'
     }
     assertCred("userpass-cred", com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl){
         assert it.description == "userpass description"
