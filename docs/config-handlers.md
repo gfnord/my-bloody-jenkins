@@ -83,7 +83,6 @@ Creates credentials in the global domain. Each top-level key is the credential I
 **Built-in types**:
 - `text` - Simple secret string
 - `file` - File credential (base64-encoded content + filename)
-- `aws` - AWS access key + secret key
 - `userpass` - Username/password pair
 - `sshkey` - SSH private key (PEM text, base64, or fileOnMaster path)
 - `cert` - PKCS12 certificate (base64 or fileOnMaster path)

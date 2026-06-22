@@ -6,11 +6,11 @@ Three base variants are built for each release:
 
 | Variant | Base Image | FROM_TAG |
 |---------|-----------|----------|
-| Alpine | `jenkins/jenkins:2.555.1-alpine` | `${LTS_VERSION}-alpine` |
-| Debian | `jenkins/jenkins:2.555.1` | `${LTS_VERSION}` |
-| JDK21 | `jenkins/jenkins:2.555.1-jdk21` | `${LTS_VERSION}-jdk21` |
+| Alpine | `jenkins/jenkins:2.555.3-alpine` | `${LTS_VERSION}-alpine` |
+| Debian | `jenkins/jenkins:2.555.3` | `${LTS_VERSION}` |
+| JDK21 | `jenkins/jenkins:2.555.3-jdk21` | `${LTS_VERSION}-jdk21` |
 
-> The default `FROM_TAG` in the `Dockerfile` is `2.555.1-jdk21`. The Makefile and `publish.sh` build all three variants.
+> The default `FROM_TAG` in the `Dockerfile` is `2.555.3-jdk21`. The Makefile and `publish.sh` build all three variants.
 
 ## Versioning
 
@@ -63,7 +63,7 @@ For a versioned release, `publish.sh` builds and pushes **9 images**:
 
 213+ plugins are pinned in `plugins.txt` and installed at build time via `jenkins-plugin-cli`. Key plugin categories:
 
-- **Cloud**: docker-plugin, kubernetes, amazon-ecs
+- **Cloud**: docker-plugin, kubernetes
 - **SCM**: git, git-client, subversion, gitlab-plugin, github-branch-source
 - **Pipeline**: workflow-aggregator, pipeline-stage-view, pipeline-model-definition
 - **Security**: ldap, active-directory, saml, google-login, github-oauth
@@ -94,7 +94,7 @@ Installed beyond the base Jenkins image:
 | Component | Version | Purpose |
 |-----------|---------|---------|
 | Python 3 | System | Config processing scripts |
-| pip packages | awscli, PyYAML, six, requests, botocore, boto3 | S3 fetching, YAML processing |
+| pip packages | PyYAML, six, requests | YAML processing |
 | envconsul | 0.13.2 | Consul/Vault env var injection |
 | gosu | 1.17 | Drop root privileges to jenkins user |
 | tini | From base | PID 1 signal handling |
@@ -120,17 +120,6 @@ docker run -d \
   -e JENKINS_ENV_ADMIN_USER=admin \
   -e JENKINS_ENV_CONFIG_YML_URL=file:///config/config.yml \
   -v /path/to/config:/config:ro \
-  -v jenkins-home:/var/jenkins_home \
-  gfnord/my-bloody-jenkins:lts
-```
-
-### Config from S3 with Watch
-
-```bash
-docker run -d \
-  -e JENKINS_ENV_ADMIN_USER=admin \
-  -e JENKINS_ENV_CONFIG_YML_URL=s3://my-bucket/jenkins/config.yml \
-  -e JENKINS_ENV_CONFIG_YML_URL_POLLING=60 \
   -v jenkins-home:/var/jenkins_home \
   gfnord/my-bloody-jenkins:lts
 ```

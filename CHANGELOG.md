@@ -1,5 +1,27 @@
 ## Changelog
 
+## Unreleased
+* Vendored the Helm chart into this repo under `chart/` (previously consumed from `odavid/my-bloody-jenkins`).
+    * `chart/Chart.yaml` — apiVersion `v2`, version `1.0.0`, appVersion tracks `LTS_VERSION.txt`
+    * `chart/templates/` — copied verbatim from upstream chart `0.1.218`, with `serviceAaccountName` typo preserved (don't break values.yaml) and `defaultK8sCloud.slaveImage` template bug fixed (now reads `.image` as the values schema declares)
+    * `chart/values.yaml` — defaults point to `gfnord/my-bloody-jenkins` and `gfnord/jenkins-jnlp-slave:latest`
+    * `.github/workflows/publish-chart.yml` — publishes OCI artifact to `ghcr.io/gfnord/charts/my-bloody-jenkins` on `v*` tags
+* Bumped Jenkins LTS pin: `2.555.1` → `2.555.3` (LTS_VERSION.txt, Dockerfile FROM_TAG, README, docs)
+* Removed all Amazon/AWS plugins and configuration support:
+    * Removed plugins: `amazon-ecr`, `amazon-ecs`, `aws-credentials`, `aws-java-sdk` (+ all `aws-java-sdk-*` sub-modules), `pipeline-aws`
+    * Removed `ecsCloud` handler and `type: ecs` cloud support from `config-handlers/CloudsConfig.groovy`
+    * Removed `awsCred` handler and `type: aws` credential support from `config-handlers/CredsConfig.groovy`
+    * Removed corresponding tests (`CloudsConfigTest.testEcs`, `CredsConfigTest` aws-cred case)
+    * Updated README and docs/deployment.md to drop Amazon ECS cloud docs and aws credential type
+* Trimmed `plugins.txt` from 213 to 72 plugins, scoped to what Infinitii pipelines actually use:
+    * Kept: kubernetes stack, git, credentials, slack, docker-workflow, timestamper, ansicolor, pipeline/workflow core, JCasC, and required transitive libraries
+    * Removed (140+ plugins): entire blueocean-* family, unused SCM (github/gitlab/svn/hg/p4/bitbucket), unused auth (ldap/AD/saml/google/oic/pam), unused build tools (ant/gradle/maven/golang/nodejs/sbt/ivy/xvfb), unused reporting (cobertura/coverage/sonar/checkmarx/gatling/robot/anchore), unused UI (dashboard/badge/jquery/echarts/font-awesome), unused integrations (jira/artifactory/email-ext/stashNotifier), unused job-mgmt (job-dsl/copyartifact/parameterized-trigger/...), unused SSH/swarm agents, docker-plugin (kept docker-workflow only)
+* Removed S3 config source support:
+    * Removed `fetch_s3()` from `bin/fetchconfig.py` and the `s3://` URL branch
+    * Removed `awscli`, `botocore`, `boto3` from Dockerfile pip install
+    * Removed AWS env-var unsets from `bin/entrypoint.sh`
+    * Updated README, docs/deployment.md, docs/architecture.md, docs/startup-lifecycle.md, bin/watch-config.sh help text
+
 ## 2.426.3-305
 * [LTS-2.426.3](https://www.jenkins.io/changelog-stable/)
 * Updated plugins:

@@ -25,7 +25,7 @@ my-bloody-jenkins/
 │
 ├── bin/                       # Shell/Python scripts for entrypoint & config
 │   ├── entrypoint.sh          # Container entrypoint (tini -> gosu jenkins)
-│   ├── fetchconfig.py         # Fetch YAML from file/s3/http and deep-merge
+│   ├── fetchconfig.py         # Fetch YAML from file/http and deep-merge
 │   ├── processconfig.py      # Env var substitution in YAML config
 │   ├── watch-config.sh        # Poll for config changes and hot-reload
 │   ├── update-config.sh       # Trigger Jenkins reconfiguration via CLI
@@ -38,8 +38,8 @@ my-bloody-jenkins/
 │   ├── GeneralConfig.groovy          # Executors, workspace dir, quiet mode, URL
 │   ├── ProxyConfig.groovy            # HTTP proxy settings
 │   ├── SecurityConfig.groovy         # Auth realms (LDAP/AD/SAML/OAuth/DB)
-│   ├── CredsConfig.groovy            # Credentials (text/file/aws/userpass/ssh/cert)
-│   ├── CloudsConfig.groovy           # Cloud providers (Docker/ECS/Kubernetes)
+│   ├── CredsConfig.groovy            # Credentials (text/file/userpass/ssh/cert)
+│   ├── CloudsConfig.groovy           # Cloud providers (Docker/Kubernetes)
 │   ├── EnvironmentVarsConfig.groovy  # Global environment variables
 │   ├── RemoveMasterEnvVarsConfig.groovy  # Hide secrets from System Info
 │   ├── ToolsConfig.groovy            # JDK/Ant/Maven/Gradle/SonarQube/Golang
@@ -100,7 +100,7 @@ All Jenkins configuration lives in one YAML file with typed sections. Each secti
 - **Mixed mode**: Use builtin handlers with embedded `configuration_as_code:` section for unsupported plugins
 
 ### Live Configuration Reload
-Configuration is fetched from URLs (file/s3/http), watched for changes, and re-applied without restarting Jenkins via `update-config.sh` calling `jenkins-cli.jar groovy`.
+Configuration is fetched from URLs (file/http), watched for changes, and re-applied without restarting Jenkins via `update-config.sh` calling `jenkins-cli.jar groovy`.
 
 ### Secret Management
 - Environment variable substitution: `${SECRET}` in YAML
@@ -121,6 +121,6 @@ Multiple YAML sources can be specified via comma-separated URLs. Files are deep-
 | Config application | Groovy (Jenkins init scripts) |
 | Secret fetching | HashiCorp envconsul 0.13.2 |
 | Container init | tini + gosu |
-| Cloud tools | AWS CLI (boto3), PyYAML, requests |
+| Cloud tools | PyYAML, requests |
 | Testing | BATS + Jenkins CLI + Groovy assertions |
 | CI/CD | GitHub Actions (3-distribution matrix) |

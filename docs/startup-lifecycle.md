@@ -91,7 +91,7 @@ watch-config.sh (runs in background via nohup)
    ┌─► fetch_config()
    │       │
    │       ├─ fetchconfig.py --source <URL> --out /dev/shm/.cache/
-   │       │     (fetches from file/s3/http, deep-merges multiple sources)
+    │       │     (fetches from file/http, deep-merges multiple sources)
    │       │
    │       ├─ processconfig.py --source ... --env-dirs ...
    │       │     (runs inside envconsul-wrapper.sh for Consul/Vault env vars)
@@ -134,7 +134,7 @@ File-based env vars produce names as `<FOLDER_NAME>_<FILE_NAME>` uppercased and 
 |----------|---------|-------------|
 | `JENKINS_ENV_ADMIN_USER` | (required) | Admin username for Jenkins |
 | `JENKINS_ENV_CONFIG_YAML` | - | Config as inline YAML string |
-| `JENKINS_ENV_CONFIG_YML_URL` | - | Config source URL(s) (file/s3/http) |
+| `JENKINS_ENV_CONFIG_YML_URL` | - | Config source URL(s) (file/http) |
 | `JENKINS_ENV_CONFIG_YML_URL_DISABLE_WATCH` | false | Disable config watching |
 | `JENKINS_ENV_CONFIG_YML_URL_POLLING` | 30 | Watch polling interval (seconds) |
 | `JENKINS_ENV_CONFIG_MODE` | - | Set to `jcasc` for JCasC mode |
