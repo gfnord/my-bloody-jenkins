@@ -1,0 +1,19 @@
+apiVersion: v2
+name: my-bloody-jenkins
+description: |
+  A Helm chart for gfnord/my-bloody-jenkins — a self-configured Jenkins Docker image,
+  based on Jenkins LTS. Vendored from odavid/my-bloody-jenkins (v0.1.218).
+type: application
+version: 1.0.0
+appVersion: "2.555.3"
+home: https://github.com/gfnord/my-bloody-jenkins
+sources:
+  - https://github.com/gfnord/my-bloody-jenkins
+icon: https://raw.githubusercontent.com/gfnord/my-bloody-jenkins/master/chart/logo/jenkins-logo.png
+maintainers:
+  - name: gfnord
+keywords:
+  - jenkins
+  - ci
+  - cd
+  - kubernetes
