@@ -85,8 +85,7 @@ my-bloody-jenkins/
 │   ├── kubernetes/            # Minikube Kubernetes cloud example
 │   └── jobs/                  # Sample seed job and JobDSL scripts
 │
-├── slides/                    # Presentation (PPTX)
-└── .github/workflows/main.yml # CI/CD: test matrix + publish
+└── slides/                    # Presentation (PPTX)
 ```
 
 ## Key Design Decisions

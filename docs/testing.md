@@ -158,26 +158,9 @@ Located in `tests/groovy/`, organized by test suite:
 **envvars/**: Assertion scripts for file-based env vars:
 - `AssertCredsFromSecret1.groovy` / `AssertCredsFromSecret2.groovy` - Verify env vars from files
 
-## CI/CD Pipeline
+## Local Build and Test
 
-GitHub Actions workflow (`.github/workflows/main.yml`):
-
-```
-Push to any branch
-  |
-  +-- Test matrix: [debian, alpine, jdk21]
-  |     +-- bats-core/bats-action@2.0.0
-  |     +-- make test-${{ matrix.dist }}
-  |
-  +-- If tag v*:
-  |     +-- Docker login (Hub + GHCR)
-  |     +-- ./publish.sh <tag>
-  |         (builds and pushes 9 image variants)
-  |
-  +-- If master branch:
-        +-- Docker login (Hub + GHCR)
-        +-- ./publish.sh latest
-```
+There is no CI pipeline; images are built locally. Use the Make targets (`make test-debian`, `make test-alpine`, `make test-jdk21`) to run the BATS suite against a locally built image, and `./publish.sh <tag>` to build and push.
 
 ## Writing New Tests
 

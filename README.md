@@ -1,10 +1,9 @@
 # My Bloody Jenkins - An opinionated Jenkins Docker Image
 
-[![Build Status](https://github.com/gfnord/my-bloody-jenkins/workflows/main/badge.svg?branch=master)](https://github.com/gfnord/my-bloody-jenkins/workflows/main/badge.svg)
 [![Docker Pulls](https://img.shields.io/docker/pulls/gfnord/my-bloody-jenkins.svg)](https://hub.docker.com/r/gfnord/my-bloody-jenkins/)
 [![Changelog](https://img.shields.io/github/v/tag/gfnord/my-bloody-jenkins?label=changelog)](https://github.com/gfnord/my-bloody-jenkins/blob/master/CHANGELOG.md)
 
-> **Fork notice**: This is the `gfnord` fork of [odavid/my-bloody-jenkins](https://github.com/odavid/my-bloody-jenkins), pinned to Jenkins LTS `2.555.3` on JDK 21. It vendors its own Helm chart and publishes both image and chart to GHCR.
+> **Fork notice**: This is the `gfnord` fork of [odavid/my-bloody-jenkins](https://github.com/odavid/my-bloody-jenkins), pinned to Jenkins LTS `2.555.3` on JDK 21. It vendors its own Helm chart. There is no CI; the image and chart are built and published manually.
 
 ## What's in the Box?
 
@@ -39,7 +38,12 @@ Ensure `unqualified-search-registries = ["docker.io"]` is set in `/etc/container
 
 ## Deploy on Kubernetes (Helm)
 
-This repo vendors its chart under [`chart/`](./chart) and publishes it as an OCI artifact to GHCR on every `v*` git tag.
+This repo vendors its chart under [`chart/`](./chart). To publish it as an OCI artifact to GHCR, package and push manually:
+
+```sh
+helm package chart/ --destination packaged/
+helm push packaged/my-bloody-jenkins-*.tgz oci://ghcr.io/gfnord/charts
+```
 
 ### From GHCR (recommended)
 
@@ -100,6 +104,7 @@ This fork tracks `odavid/my-bloody-jenkins` with the following intentional diver
 - **Jenkins LTS**: pinned to `2.555.3` (JDK 21)
 - **Plugins trimmed**: 213 → 72, scoped to Kubernetes + Git + Docker + Slack + JCasC. Removed: BlueOcean, unused SCM integrations, unused auth realms, unused build tools, unused reporting, unused UI extras.
 - **AWS removed**: no Amazon ECS cloud, no AWS credentials, no `aws-java-sdk-*` plugins, no `boto3`/`awscli` in the image, no `s3://` config source.
-- **Helm chart vendored**: `chart/` ships in this repo, published as OCI to `ghcr.io/gfnord/charts/my-bloody-jenkins`. No `helm repo add odavid ...` required.
+- **Helm chart vendored**: `chart/` ships in this repo; push it to `ghcr.io/gfnord/charts/my-bloody-jenkins` manually when cutting a release. No `helm repo add odavid ...` required.
+- **No CI**: image and chart are built and published manually from a local checkout (see `publish.sh`, `Makefile`, and [docs/deployment.md](./docs/deployment.md)).
 
 See [`CHANGELOG.md`](./CHANGELOG.md) for the full history.

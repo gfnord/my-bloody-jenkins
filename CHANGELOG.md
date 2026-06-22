@@ -1,11 +1,12 @@
 ## Changelog
 
 ## Unreleased
+* Removed all GitHub Actions workflows (`.github/workflows/main.yml`, `.github/workflows/publish-chart.yml`). Image and Helm chart are now built and published manually from a local checkout.
 * Vendored the Helm chart into this repo under `chart/` (previously consumed from `odavid/my-bloody-jenkins`).
     * `chart/Chart.yaml` — apiVersion `v2`, version `1.0.0`, appVersion tracks `LTS_VERSION.txt`
     * `chart/templates/` — copied verbatim from upstream chart `0.1.218`, with `serviceAaccountName` typo preserved (don't break values.yaml) and `defaultK8sCloud.slaveImage` template bug fixed (now reads `.image` as the values schema declares)
     * `chart/values.yaml` — defaults point to `gfnord/my-bloody-jenkins` and `gfnord/jenkins-jnlp-slave:latest`
-    * `.github/workflows/publish-chart.yml` — publishes OCI artifact to `ghcr.io/gfnord/charts/my-bloody-jenkins` on `v*` tags
+    * To publish: `helm package chart/ && helm push my-bloody-jenkins-*.tgz oci://ghcr.io/gfnord/charts`
 * Bumped Jenkins LTS pin: `2.555.1` → `2.555.3` (LTS_VERSION.txt, Dockerfile FROM_TAG, README, docs)
 * Removed all Amazon/AWS plugins and configuration support:
     * Removed plugins: `amazon-ecr`, `amazon-ecs`, `aws-credentials`, `aws-java-sdk` (+ all `aws-java-sdk-*` sub-modules), `pipeline-aws`
