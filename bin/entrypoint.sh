@@ -25,8 +25,6 @@ if [[ $# -lt 1 ]] || [[ "$1" == "-"* ]]; then
                 --url "${JENKINS_ENV_CONFIG_YML_URL}" \
                 --polling-interval "${JENKINS_ENV_CONFIG_YML_URL_POLLING:-30}" &
         fi
-        unset AWS_ACCESS_KEY_ID
-        unset AWS_SECRET_ACCESS_KEY
     fi
 
     if [ -n "$JENKINS_ENV_PLUGINS" ]; then

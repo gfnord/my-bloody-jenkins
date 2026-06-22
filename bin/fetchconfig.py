@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 from __future__ import print_function
 import argparse
-import boto3
-import botocore
 import glob
 import os
 import requests
 import yaml
-import io
 from shutil import copyfile
 
 try:
@@ -33,28 +30,6 @@ def fetch_http(source):
     configs.append(dict(src=source, contents=res.text))
     return configs
 
-
-def fetch_s3(source):
-    configs = []
-    if source.startswith('s3://'):
-        source = source.replace('s3://', '')
-    s3 = boto3.resource('s3')
-
-    bucket_name = source.split('/')[0]
-    s3_key = '/'.join(source.split('/')[1:])
-    try:
-        outbuff = io.BytesIO()
-        s3.Bucket(bucket_name).download_fileobj(s3_key, outbuff)
-        data = outbuff.getvalue()
-        configs.append(dict(src=source, contents=data))
-        outbuff.close()
-    except botocore.exceptions.ClientError as e:
-        if e.response['Error']['Code'] == "404":
-            print("The object %s does not exist in bucket: %s" % (s3_key, bucket_name))
-            raise
-        else:
-            raise
-    return configs
 
 def fetch_files(source):
     configs = []
@@ -87,8 +62,6 @@ def fetch_merged_config(source):
             continue
         if src.startswith('file://'):
             raw_configs += fetch_files(src)
-        elif src.startswith('s3://'):
-            raw_configs += fetch_s3(src)
         elif src.startswith('http://') or src.startswith('https://'):
             raw_configs += fetch_http(src)
 

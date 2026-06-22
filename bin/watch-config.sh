@@ -7,7 +7,7 @@ usage(){
     cat << EOF
 Usage: $program [options...] --url <url>
 Options:
--u, --url <url>                                     - file to be watched and fetched. file://<file>, s3://<file>, http[s]://<file>
+-u, --url <url>                                     - file to be watched and fetched. file://<file>, http[s]://<file>
 -d,--cache-dir <cache-dir>                          - Cached directory (Default: /tmp/.s3.cache)
 --polling-interval <polling-interval-in-seconds>]   - Polling interval in seconds (Default 30)
 --first-time-execute                                - Should execute command on first time (Default: false)

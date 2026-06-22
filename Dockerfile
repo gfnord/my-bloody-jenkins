@@ -29,7 +29,7 @@ RUN \
      fi
 
 RUN  pip3 install --break-system-packages --no-cache-dir wheel \
-  && pip3 install --break-system-packages --no-cache-dir awscli PyYAML six requests botocore boto3
+  && pip3 install --break-system-packages --no-cache-dir PyYAML six requests
 
 RUN curl $CURL_OPTIONS https://releases.hashicorp.com/envconsul/0.13.2/envconsul_0.13.2_linux_amd64.zip -o /tmp/envconsul.zip && \
     unzip -d /usr/bin /tmp/envconsul.zip && \
@@ -106,7 +106,6 @@ ENV JENKINS_HTTP_PORT_FOR_SLAVES=8080
 #ENV JENKINS_ENV_HOST_IP=<REAL_IP>
 #ENV JENKINS_ENV_HOST_IP_CMD='<command to fetch ip>'
 # This variable will be evaluated and should retrun a valid IP address:
-# AWS:      JENKINS_ENV_HOST_IP_CMD='curl http://169.254.169.254/latest/meta-data/local-ipv4'
 # General:  JENKINS_ENV_HOST_IP_CMD='ip route | grep default | awk '"'"'{print $3}'"'"''
 ####################################################################################
 
