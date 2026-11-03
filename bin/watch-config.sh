@@ -65,8 +65,13 @@ fetch_config(){
 exec_command(){
     if [ -n "$COMMAND" ]; then
         log "Running $COMMAND."
-        $COMMAND
-        log "Running $COMMAND. Done..."
+        if $COMMAND; then
+            log "Running $COMMAND. Done..."
+        else
+            local rc=$?
+            log "ERROR: $COMMAND failed with exit code $rc. Configuration was NOT applied."
+            return $rc
+        fi
     fi
 }
 

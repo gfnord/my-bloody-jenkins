@@ -14,8 +14,10 @@ if [ ! -f $script_dir/jenkins-cli.jar ]; then
 fi
 
 
+# -http: the default WebSocket transport is rejected by newer Jenkins (403, "Unexpected request
+# origin") because the Origin localhost:8080 does not match the configured Jenkins root URL.
 echo "Updating Jenkins Configuration"
 java -jar $script_dir/jenkins-cli.jar \
-    -s http://localhost:8080/ $AUTH_ARG \
+    -s http://localhost:8080/ -http $AUTH_ARG \
     groovy = < /var/jenkins_home/init.groovy.d/JenkinsConfigLoader.groovy
 echo "Jenkins Configuration Updated"
